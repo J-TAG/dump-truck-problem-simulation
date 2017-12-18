@@ -23,6 +23,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_pushButtonSimulation_clicked();
+
 private:
     Ui::MainWindow *ui;
     void initializeLoadingTimeTable();

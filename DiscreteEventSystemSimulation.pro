@@ -25,10 +25,31 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        MainWindow.cpp
+        MainWindow.cpp \
+    DialogSimulation.cpp \
+    DumpTruck.cpp \
+    LoadingQueue.cpp \
+    Loader.cpp \
+    WeighQueue.cpp \
+    Queue.cpp \
+    Scale.cpp \
+    Event.cpp \
+    FutureEventList.cpp \
+    DataProvider.cpp
 
 HEADERS += \
-        MainWindow.hpp
+        MainWindow.hpp \
+    DialogSimulation.hpp \
+    DumpTruck.hpp \
+    LoadingQueue.hpp \
+    Loader.hpp \
+    WeighQueue.hpp \
+    Queue.hpp \
+    Scale.hpp \
+    Event.hpp \
+    FutureEventList.hpp \
+    DataProvider.hpp
 
 FORMS += \
-        MainWindow.ui
+        MainWindow.ui \
+    DialogSimulation.ui

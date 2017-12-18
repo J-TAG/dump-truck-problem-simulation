@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>1100</width>
-    <height>717</height>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Simulation</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTableWidget" name="tableWidgetLoadingTime">
@@ -20,7 +20,7 @@
       <x>20</x>
       <y>10</y>
       <width>781</width>
-      <height>171</height>
+      <height>131</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -59,9 +59,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>200</y>
+      <y>180</y>
       <width>781</width>
-      <height>192</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="editTriggers">
@@ -93,9 +93,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>410</y>
+      <y>320</y>
       <width>781</width>
-      <height>192</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="editTriggers">
@@ -121,6 +121,19 @@
     <column/>
     <column/>
     <column/>
+   </widget>
+   <widget class="QPushButton" name="pushButtonSimulation">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>170</y>
+      <width>171</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Simulation</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

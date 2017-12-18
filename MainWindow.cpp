@@ -6,8 +6,12 @@
 **
 ** This file created in 12.
 **************************************************************************/
+#include "DialogSimulation.hpp"
+#include "FutureEventList.hpp"
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
+
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -164,4 +168,11 @@ void MainWindow::initializeTravelTimeTable()
 
     QTableWidgetItem *item16 = new QTableWidgetItem("0");
     ui->tableWidgetTravelTime->setItem(3, 3, item16);
+}
+
+void MainWindow::on_pushButtonSimulation_clicked()
+{
+    FutureEventList::getInstance()->clear();
+    DialogSimulation *dlg = new DialogSimulation(this);
+    dlg->open();
 }
