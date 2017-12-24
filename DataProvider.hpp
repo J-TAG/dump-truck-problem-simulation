@@ -20,10 +20,14 @@ public:
     static void updateClock(unsigned int newClock);
     static unsigned int getClockTimePenalty();
     static unsigned int getCurrentClock();
+    static void clear();
+    static void setSimulationCount(unsigned int count);
+    static unsigned int getSimulationCount();
 
 private:
     static unsigned int currentClock;
     static unsigned int pastClock;
+    static unsigned int simulationCount;
 };
 
 #endif // DATAPROVIDER_HPP

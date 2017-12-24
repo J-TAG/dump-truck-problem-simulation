@@ -18,6 +18,8 @@ public:
     static void appendScaleBusyTime(int time);
     static int getLoadersBusyTime();
     static int getScaleBusyTime();
+    static void clear();
+
 private:
     static int busyTimeLoaders;
     static int busyTimeScale;

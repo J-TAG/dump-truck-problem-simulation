@@ -39,6 +39,7 @@ void DialogSimulation::initializeSimulationTable()
     QStringList strLstHeaders;
     strLstHeaders << "Clock t" << "LQ(t)" << "L(t)" << "WQ(t)" << "W(t)" << "Loader Queue" << "Weigh Queue" << "Future Event List" << "B L" << "B S";
     ui->tableWidgetSimulation->setHorizontalHeaderLabels(strLstHeaders);
+    ui->tableWidgetSimulation->setRowCount(DataProvider::getSimulationCount());
 
     // Trucks
     DumpTruck dt1(1);
@@ -86,7 +87,7 @@ void DialogSimulation::initializeSimulationTable()
     lstMap.append(row1);
 
     // Second
-    for (int i = 0; i < 85; ++i) {
+    for (unsigned int i = 0; i < DataProvider::getSimulationCount() - 1; ++i) {
         Event *nextEvent = futureEventList->getNextEvent();
 
         if(nextEvent == nullptr) {

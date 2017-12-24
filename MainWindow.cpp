@@ -6,6 +6,8 @@
 **
 ** This file created in 12.
 **************************************************************************/
+#include "CumulativeStatistics.hpp"
+#include "DataProvider.hpp"
 #include "DialogSimulation.hpp"
 #include "FutureEventList.hpp"
 #include "MainWindow.hpp"
@@ -173,6 +175,10 @@ void MainWindow::initializeTravelTimeTable()
 void MainWindow::on_pushButtonSimulation_clicked()
 {
     FutureEventList::getInstance()->clear();
+    DataProvider::clear();
+    CumulativeStatistics::clear();
+
+    DataProvider::setSimulationCount(ui->spinBoxSimulationCount->value());
     DialogSimulation *dlg = new DialogSimulation(this);
     dlg->open();
 }

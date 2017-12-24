@@ -36,3 +36,9 @@ int CumulativeStatistics::getScaleBusyTime()
 {
     return CumulativeStatistics::busyTimeScale;
 }
+
+void CumulativeStatistics::clear()
+{
+    CumulativeStatistics::busyTimeLoaders = 0;
+    CumulativeStatistics::busyTimeScale = 0;
+}
