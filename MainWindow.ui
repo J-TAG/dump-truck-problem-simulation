@@ -116,6 +116,9 @@
       </item>
       <item>
        <widget class="QSpinBox" name="spinBoxSimulationCount">
+        <property name="minimum">
+         <number>1</number>
+        </property>
         <property name="maximum">
          <number>1000</number>
         </property>
@@ -220,7 +223,7 @@
      <x>0</x>
      <y>0</y>
      <width>1209</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
