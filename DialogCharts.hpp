@@ -23,16 +23,21 @@ class DialogCharts : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogCharts(QWidget *parent, QLineSeries *seriesBlData, QLineSeries *seriesBsData);
+    explicit DialogCharts(QWidget *parent, QLineSeries *seriesBlData, QLineSeries *seriesBsData, QLineSeries *seriesLoading, QLineSeries *seriesWeighing);
     ~DialogCharts();
 
 private:
-    void initBlChart();
+    void initBusyChart();
+    void initQueueChart();
     Ui::DialogCharts *ui;
-    QChart *chartBl;
-    QChart *chartBs;
+    QChart *chartBusy;
+    QChart *chartQueue;
     QLineSeries *seriesBlData;
     QLineSeries *seriesBsData;
+    QLineSeries *seriesLoading;
+    QLineSeries *seriesWeighing;
+    QAreaSeries *seriesBl;
+    QAreaSeries *seriesBs;
 };
 
 #endif // DIALOGCHARTS_HPP

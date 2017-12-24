@@ -13,6 +13,7 @@
 #include <QHash>
 #include <QAbstractButton>
 #include <QLineSeries>
+#include <QSplineSeries>
 
 using namespace QtCharts;
 
@@ -44,6 +45,8 @@ private:
     QList<QHash<Columns, QString>> lstMap;
     QLineSeries *seriesBlData;
     QLineSeries *seriesBsData;
+    QLineSeries *seriesLoading;
+    QLineSeries *seriesWeighing;
 };
 
 #endif // DIALOGSIMULATION_HPP

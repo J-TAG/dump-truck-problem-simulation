@@ -9,33 +9,42 @@
 #include "CumulativeStatistics.hpp"
 #include "DataProvider.hpp"
 #include "DialogCharts.hpp"
+#include "DialogSimulation.hpp"
 #include "ui_DialogCharts.h"
 
-DialogCharts::DialogCharts(QWidget *parent, QLineSeries *seriesBlData, QLineSeries *seriesBsData) :
+DialogCharts::DialogCharts(QWidget *parent, QLineSeries *seriesBlData, QLineSeries *seriesBsData, QLineSeries *seriesLoading, QLineSeries *seriesWeighing) :
     QDialog(parent),
-    ui(new Ui::DialogCharts), seriesBlData(seriesBlData), seriesBsData(seriesBsData)
+    ui(new Ui::DialogCharts), seriesBlData(seriesBlData), seriesBsData(seriesBsData), seriesLoading(seriesLoading), seriesWeighing(seriesWeighing)
 {
     ui->setupUi(this);
 
-    this->initBlChart();
+    // Busy chart
+    this->initBusyChart();
+
+    // Queue chart
+    this->initQueueChart();
 }
 
 DialogCharts::~DialogCharts()
 {
+    this->chartBusy->removeSeries(this->seriesBl);
+    this->chartBusy->removeSeries(this->seriesBs);
+    this->chartQueue->removeSeries(this->seriesLoading);
+    this->chartQueue->removeSeries(this->seriesWeighing);
     delete ui;
 }
 
-void DialogCharts::initBlChart()
+void DialogCharts::initBusyChart()
 {
-    this->chartBl = new QChart();
+    this->chartBusy = new QChart();
 
-    QAreaSeries *seriesBl = new QAreaSeries(seriesBlData);
+    this->seriesBl = new QAreaSeries(this->seriesBlData);
     seriesBl->setName("Loaders Busy Time");
-    seriesBl->setOpacity(.7);
+    seriesBl->setOpacity(.85);
 
-    QAreaSeries *seriesBs = new QAreaSeries(seriesBsData);
+    this->seriesBs = new QAreaSeries(this->seriesBsData);
     seriesBs->setName("Scale Busy Time");
-    seriesBs->setOpacity(.7);
+    seriesBs->setOpacity(.85);
 
     QLinearGradient gradientBl(QPointF(0, 0), QPointF(0, 1));
     gradientBl.setColorAt(0.0, 0x72309f);
@@ -49,20 +58,51 @@ void DialogCharts::initBlChart()
     gradientBs.setCoordinateMode(QGradient::ObjectBoundingMode);
     seriesBs->setBrush(gradientBs);
 
-    this->chartBl->addSeries(seriesBs);
-    this->chartBl->addSeries(seriesBl);
-    this->chartBl->setTitle("Total Busy Time");
-    this->chartBl->setAnimationOptions(QChart::AllAnimations);
+    this->chartBusy->addSeries(seriesBs);
+    this->chartBusy->addSeries(seriesBl);
+    this->chartBusy->setTitle("Total Busy Time");
+    this->chartBusy->setAnimationOptions(QChart::AllAnimations);
 
-    this->chartBl->createDefaultAxes();
+    this->chartBusy->createDefaultAxes();
     int max = qMax(CumulativeStatistics::getLoadersBusyTime(), CumulativeStatistics::getScaleBusyTime());
-    this->chartBl->axisX()->setRange(0, DataProvider::getCurrentClock());
-    this->chartBl->axisY()->setRange(0, max);
+    this->chartBusy->axisX()->setRange(0, DataProvider::getCurrentClock());
+    this->chartBusy->axisX()->setTitleText("Clock");
+    this->chartBusy->axisY()->setRange(0, max);
+    this->chartBusy->axisY()->setTitleText("Busy Time");
 
-    this->chartBl->legend()->setVisible(true);
-    this->chartBl->legend()->setAlignment(Qt::AlignBottom);
+    this->chartBusy->legend()->setVisible(true);
+    this->chartBusy->legend()->setAlignment(Qt::AlignBottom);
 
-    QChartView *chartView = new QChartView(this->chartBl, this);
+    QChartView *chartView = new QChartView(this->chartBusy, this);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    ui->horizontalLayout->addWidget(chartView, 0, 0);
+}
+
+void DialogCharts::initQueueChart()
+{
+    this->chartQueue = new QChart();
+
+    this->seriesLoading->setName("Loadeing Queue");
+    this->seriesWeighing->setName("Weighing Queue");
+
+    this->chartQueue->addSeries(this->seriesLoading);
+    this->chartQueue->addSeries(this->seriesWeighing);
+    this->chartQueue->setTitle("Queues");
+    this->chartQueue->setAnimationOptions(QChart::AllAnimations);
+
+    this->chartQueue->createDefaultAxes();
+    QSettings settings;
+    auto truckCount = settings.value("simulation/itemsInitialize/trucks").toUInt();
+    this->chartQueue->axisX()->setRange(0, DataProvider::getCurrentClock());
+    this->chartQueue->axisX()->setTitleText("Clock");
+    this->chartQueue->axisY()->setRange(0, truckCount);
+    this->chartQueue->axisY()->setTitleText("Trucks in Queue");
+
+    this->chartQueue->legend()->setVisible(true);
+    this->chartQueue->legend()->setAlignment(Qt::AlignBottom);
+
+    QChartView *chartView = new QChartView(this->chartQueue, this);
     chartView->setRenderHint(QPainter::Antialiasing);
 
     ui->horizontalLayout->addWidget(chartView, 0, 0);

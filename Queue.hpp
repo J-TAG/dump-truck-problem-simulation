@@ -23,6 +23,7 @@ public:
     DumpTruck *getNextTruck();
     QString getString() const;
     QString getCount() const;
+    int getCountInt() const;
 
 signals:
 

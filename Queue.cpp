@@ -45,5 +45,10 @@ QString Queue::getString() const
 
 QString Queue::getCount() const
 {
-    return QString::number(this->queue.count());
+    return QString::number(this->getCountInt());
+}
+
+int Queue::getCountInt() const
+{
+    return this->queue.count();
 }

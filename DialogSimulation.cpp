@@ -31,6 +31,8 @@ DialogSimulation::DialogSimulation(QWidget *parent) :
 
     this->seriesBlData = new QLineSeries(this);
     this->seriesBsData = new QLineSeries(this);
+    this->seriesLoading = new QLineSeries(this);
+    this->seriesWeighing = new QLineSeries(this);
 
     // Simulation table
     this->initializeSimulationTable();
@@ -57,7 +59,7 @@ void DialogSimulation::onStatisticsButtonClicked(bool checked)
 {
     Q_UNUSED(checked);
 
-    DialogCharts dlg(this, this->seriesBlData, this->seriesBsData);
+    DialogCharts dlg(this, this->seriesBlData, this->seriesBsData, this->seriesLoading, this->seriesWeighing);
     dlg.exec();
 }
 
@@ -138,7 +140,9 @@ void DialogSimulation::executeSimulation()
     firstRow[WQt] = weighQueue.getCount();
     firstRow[Wt] = scale.getCount();
     firstRow[LoaderQueue] = loadingQueue.getString();
+    this->seriesLoading->append(DataProvider::getCurrentClock(), loadingQueue.getCountInt());
     firstRow[WeighQueue] = weighQueue.getString();
+    this->seriesWeighing->append(DataProvider::getCurrentClock(), weighQueue.getCountInt());
     firstRow[FutureEventList] = futureEventList->getString();
     firstRow[Bl] = QString::number(CumulativeStatistics::getLoadersBusyTime());
     this->seriesBlData->append(DataProvider::getCurrentClock(), CumulativeStatistics::getLoadersBusyTime());
@@ -177,7 +181,9 @@ void DialogSimulation::executeSimulation()
         row[WQt] = weighQueue.getCount();
         row[Wt] = scale.getCount();
         row[LoaderQueue] = loadingQueue.getString();
+        this->seriesLoading->append(DataProvider::getCurrentClock(), loadingQueue.getCountInt());
         row[WeighQueue] = weighQueue.getString();
+        this->seriesWeighing->append(DataProvider::getCurrentClock(), weighQueue.getCountInt());
         row[FutureEventList] = futureEventList->getString();
         row[Bl] = QString::number(CumulativeStatistics::getLoadersBusyTime());
         this->seriesBlData->append(DataProvider::getCurrentClock(), CumulativeStatistics::getLoadersBusyTime());
