@@ -14,6 +14,8 @@
 #include "ui_MainWindow.h"
 
 #include <QDebug>
+#include <QMessageBox>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -29,6 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Travel time
     this->initializeTravelTimeTable();
+
+    // Load data
+    this->loadData();
 }
 
 MainWindow::~MainWindow()
@@ -172,13 +177,47 @@ void MainWindow::initializeTravelTimeTable()
     ui->tableWidgetTravelTime->setItem(3, 3, item16);
 }
 
+void MainWindow::saveData()
+{
+    QSettings settings;
+    settings.setValue("simulation/count", ui->spinBoxSimulationCount->value());
+    settings.setValue("simulation/itemsInitialize/trucks", ui->spinBoxNumberOfTrucks->value());
+    settings.setValue("simulation/itemsInitialize/loadingQueue", ui->spinBoxNumberOfTrucksInLoadingQueue->value());
+    settings.setValue("simulation/itemsInitialize/loader", ui->spinBoxNumberOfTrucksInLoaders->value());
+    settings.setValue("simulation/itemsInitialize/weighQueue", ui->spinBoxNumberOftrucksInWeighQueue->value());
+    settings.setValue("simulation/itemsInitialize/scale", ui->checkBoxTruckInScale->isChecked());
+}
+
+void MainWindow::loadData()
+{
+    QSettings settings;
+    ui->spinBoxSimulationCount->setValue(settings.value("simulation/count").toUInt());
+    ui->spinBoxNumberOfTrucks->setValue(settings.value("simulation/itemsInitialize/trucks").toUInt());
+    ui->spinBoxNumberOfTrucksInLoadingQueue->setValue(settings.value("simulation/itemsInitialize/loadingQueue").toUInt());
+    ui->spinBoxNumberOfTrucksInLoaders->setValue(settings.value("simulation/itemsInitialize/loader").toUInt());
+    ui->spinBoxNumberOftrucksInWeighQueue->setValue(settings.value("simulation/itemsInitialize/weighQueue").toUInt());
+    ui->checkBoxTruckInScale->setChecked(settings.value("simulation/itemsInitialize/scale").toBool());
+}
+
 void MainWindow::on_pushButtonSimulation_clicked()
 {
+    unsigned int numberOfTrucks = ui->spinBoxNumberOfTrucks->value();
+    unsigned int totalOtherTrucksCount = ui->spinBoxNumberOfTrucksInLoadingQueue->value();
+    totalOtherTrucksCount += ui->spinBoxNumberOfTrucksInLoaders->value();
+    totalOtherTrucksCount += ui->spinBoxNumberOftrucksInWeighQueue->value();
+    totalOtherTrucksCount += ui->checkBoxTruckInScale->isChecked() ? 1 : 0;
+
+    if(numberOfTrucks != totalOtherTrucksCount) {
+        QMessageBox::critical(this, "Inavlid Input Data", "Total number of trucks in loading queue, loader, weigh queue and scale must be equvalent to number of trucks input.");
+        return;
+    }
+
     FutureEventList::getInstance()->clear();
     DataProvider::clear();
     CumulativeStatistics::clear();
 
-    DataProvider::setSimulationCount(ui->spinBoxSimulationCount->value());
+    this->saveData();
+
     DialogSimulation *dlg = new DialogSimulation(this);
     dlg->open();
 }

@@ -31,6 +31,8 @@ private:
     void initializeLoadingTimeTable();
     void initializeWeghingTimeTable();
     void initializeTravelTimeTable();
+    void saveData();
+    void loadData();
 };
 
 #endif // MAINWINDOW_HPP

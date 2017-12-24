@@ -12,7 +12,6 @@
 
 unsigned int DataProvider::currentClock = 0;
 unsigned int DataProvider::pastClock = 0;
-unsigned int DataProvider::simulationCount = 0;
 
 DataProvider::DataProvider()
 {
@@ -124,15 +123,4 @@ void DataProvider::clear()
 {
     DataProvider::currentClock = 0;
     DataProvider::pastClock = 0;
-    DataProvider::simulationCount = 0;
-}
-
-void DataProvider::setSimulationCount(unsigned int count)
-{
-    DataProvider::simulationCount = count;
-}
-
-unsigned int DataProvider::getSimulationCount()
-{
-    return DataProvider::simulationCount;
 }

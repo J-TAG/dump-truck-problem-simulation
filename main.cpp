@@ -12,6 +12,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    QCoreApplication::setOrganizationName("Pure Soft");
+    QCoreApplication::setOrganizationDomain("puresoftware.org");
+    QCoreApplication::setApplicationName("Discrete Event System Simulation");
+
     MainWindow w;
     w.show();
 

@@ -17,12 +17,15 @@
 #include "ui_DialogSimulation.h"
 
 #include <QMessageBox>
+#include <QSettings>
 
 DialogSimulation::DialogSimulation(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSimulation)
 {
     ui->setupUi(this);
+
+    connect(this, &DialogSimulation::finished, this, &DialogSimulation::onFinished);
 
     // Simulation table
     this->initializeSimulationTable();
@@ -33,61 +36,102 @@ DialogSimulation::~DialogSimulation()
     delete ui;
 }
 
+void DialogSimulation::onFinished(int code)
+{
+    Q_UNUSED(code);
+
+    QSettings settings;
+    settings.setValue("simulator/headerState", ui->tableWidgetSimulation->horizontalHeader()->saveState());
+    settings.setValue("simulator/geometry", this->saveGeometry());
+}
+
 void DialogSimulation::initializeSimulationTable()
 {
     // Headers
     QStringList strLstHeaders;
     strLstHeaders << "Clock t" << "LQ(t)" << "L(t)" << "WQ(t)" << "W(t)" << "Loader Queue" << "Weigh Queue" << "Future Event List" << "B L" << "B S";
     ui->tableWidgetSimulation->setHorizontalHeaderLabels(strLstHeaders);
-    ui->tableWidgetSimulation->setRowCount(DataProvider::getSimulationCount());
+    QSettings settings;
+    ui->tableWidgetSimulation->setRowCount(settings.value("simulation/count").toUInt());
+
+
+    // Load past state
+    ui->tableWidgetSimulation->horizontalHeader()->restoreState(settings.value("simulator/headerState").toByteArray());
+    this->restoreGeometry(settings.value("simulator/geometry").toByteArray());
+
+    // Execute simulation
+    this->executeSimulation();
+
+    // Load table
+    this->visualizeDataTable();
+}
+
+void DialogSimulation::executeSimulation()
+{
+    QSettings settings;
+
+    // First item
 
     // Trucks
-    DumpTruck dt1(1);
-    DumpTruck dt2(2);
-    DumpTruck dt3(3);
-    DumpTruck dt4(4);
-    DumpTruck dt5(5);
-    DumpTruck dt6(6);
+    QList<DumpTruck*> trucks;
+    auto truckCount = settings.value("simulation/itemsInitialize/trucks").toUInt();
+    for (unsigned int i = 1; i < truckCount + 1; ++i) {
+        auto dt = new DumpTruck(i, this);
+        trucks.append(dt);
+    }
 
     // Loading queue
     LoadingQueue loadingQueue;
-    loadingQueue.addTruck(&dt4);
-    loadingQueue.addTruck(&dt5);
-    loadingQueue.addTruck(&dt6);
+    auto loadingQueueCount = settings.value("simulation/itemsInitialize/loadingQueue").toUInt();
+    for (unsigned int i = 0; i < loadingQueueCount; ++i) {
+        loadingQueue.addTruck(trucks.at(i));
+    }
 
     // Loaders
     Loader loaders;
-    loaders.addTruck(&dt3);
-    loaders.addTruck(&dt2);
+
+    auto loaderCount = settings.value("simulation/itemsInitialize/loader").toUInt();
+    loaderCount += loadingQueueCount;
+    for (unsigned int i = loadingQueueCount; i < loaderCount; ++i) {
+        loaders.addTruck(trucks.at(i));
+    }
 
     // Weigh queue
     ::WeighQueue weighQueue;
 
+    auto weighQueueCount = settings.value("simulation/itemsInitialize/weighQueue").toUInt();
+    weighQueueCount += loaderCount;
+    for (unsigned int i = loaderCount; i < weighQueueCount; ++i) {
+        weighQueue.addTruck(trucks.at(i));
+    }
+
     // Scale
     Scale scale;
-    scale.addTruck(&dt1);
+    if(settings.value("simulation/itemsInitialize/scale").toBool()) {
+        scale.addTruck(trucks.last());
+    }
 
     // Events
     auto futureEventList = ::FutureEventList::getInstance();
 
+    QHash<Columns, QString> firstRow;
 
+    firstRow[Clock] = QString::number(DataProvider::getCurrentClock());
+    firstRow[LQt] = loadingQueue.getCount();
+    firstRow[Lt] = loaders.getCount();
+    firstRow[WQt] = weighQueue.getCount();
+    firstRow[Wt] = scale.getCount();
+    firstRow[LoaderQueue] = loadingQueue.getString();
+    firstRow[WeighQueue] = weighQueue.getString();
+    firstRow[FutureEventList] = futureEventList->getString();
+    firstRow[Bl] = QString::number(CumulativeStatistics::getLoadersBusyTime());
+    firstRow[Bs] = QString::number(CumulativeStatistics::getScaleBusyTime());
+    lstMap.append(firstRow);
 
-    QHash<Columns, QString> row1;
+    auto simulationCount = settings.value("simulation/count").toUInt();
 
-    row1[Clock] = QString::number(DataProvider::getCurrentClock());
-    row1[LQt] = loadingQueue.getCount();
-    row1[Lt] = loaders.getCount();
-    row1[WQt] = weighQueue.getCount();
-    row1[Wt] = scale.getCount();
-    row1[LoaderQueue] = loadingQueue.getString();
-    row1[WeighQueue] = weighQueue.getString();
-    row1[FutureEventList] = futureEventList->getString();
-    row1[Bl] = QString::number(CumulativeStatistics::getLoadersBusyTime());
-    row1[Bs] = QString::number(CumulativeStatistics::getScaleBusyTime());
-    lstMap.append(row1);
-
-    // Second
-    for (unsigned int i = 0; i < DataProvider::getSimulationCount() - 1; ++i) {
+    // Rest of items
+    for (unsigned int i = 0; i < simulationCount - 1; ++i) {
         Event *nextEvent = futureEventList->getNextEvent();
 
         if(nextEvent == nullptr) {
@@ -122,7 +166,10 @@ void DialogSimulation::initializeSimulationTable()
         lstMap.append(row2);
     }
 
+}
 
+void DialogSimulation::visualizeDataTable()
+{
     // View items
     for (int i = 0; i < lstMap.count(); ++i) {
         auto map = lstMap.at(i);
@@ -157,5 +204,4 @@ void DialogSimulation::initializeSimulationTable()
         QTableWidgetItem *item10 = new QTableWidgetItem(map[Bs]);
         ui->tableWidgetSimulation->setItem(i, 9, item10);
     }
-
 }

@@ -27,8 +27,13 @@ public:
     explicit DialogSimulation(QWidget *parent = 0);
     ~DialogSimulation();
 
+public slots:
+    void onFinished(int code);
+
 private:
     void initializeSimulationTable();
+    void executeSimulation();
+    void visualizeDataTable();
     Ui::DialogSimulation *ui;
     QList<QHash<Columns, QString>> lstMap;
 };

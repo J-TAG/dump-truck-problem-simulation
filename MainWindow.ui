@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1089</width>
+    <width>1209</width>
     <height>636</height>
    </rect>
   </property>
@@ -125,6 +125,72 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="labelNumberOfTrucks">
+        <property name="text">
+         <string>Number of trucks</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBoxNumberOfTrucks">
+        <property name="minimum">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelNumberOfTrucksInLoadingQueue">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Trucks in loading queue&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBoxNumberOfTrucksInLoadingQueue">
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelNumberOfTrucksInLoader">
+        <property name="text">
+         <string>Trucks in loaders</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBoxNumberOfTrucksInLoaders">
+        <property name="maximum">
+         <number>2</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelNumberOfTrucksInWeighQueue">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Trucks in weigh queue&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBoxNumberOftrucksInWeighQueue">
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBoxTruckInScale">
+        <property name="text">
+         <string>Truck in scale</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -153,7 +219,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1089</width>
+     <width>1209</width>
      <height>22</height>
     </rect>
    </property>
