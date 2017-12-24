@@ -166,6 +166,11 @@ void DialogSimulation::executeSimulation()
         lstMap.append(row2);
     }
 
+    // Cleanup
+    foreach (auto truck, trucks) {
+        truck->deleteLater();
+    }
+
 }
 
 void DialogSimulation::visualizeDataTable()
