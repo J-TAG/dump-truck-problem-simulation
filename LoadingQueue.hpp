@@ -10,6 +10,7 @@
 #define LOADINGQUEUE_HPP
 
 #include "DumpTruck.hpp"
+#include "Event.hpp"
 #include "Queue.hpp"
 
 #include <QObject>
@@ -21,6 +22,7 @@ class LoadingQueue : public Queue
 public:
     explicit LoadingQueue(QObject *parent = nullptr);
     void addTruck(DumpTruck *truck);
+    void processEvents(Event *nextEvent);
 
 signals:
 

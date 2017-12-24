@@ -75,12 +75,15 @@ QString Loader::getCount() const
 
 void Loader::processEvents(LoadingQueue &loadingQueue, WeighQueue &weighQueue)
 {
+    unsigned int timePenalty = DataProvider::getClockTimePenalty();
+
     // Update status of current items
     if(this->loader1 != nullptr) {
         auto futureList = FutureEventList::getInstance();
         Event* event = futureList->atTruck(this->loader1->getIndex());
         if(event != nullptr) {
             if(event->getEventType() == Event::EL && event->getTime() == DataProvider::getCurrentClock()) {
+                CumulativeStatistics::appendLoadersBusyTime(timePenalty);
                 // At this time, loading is finished and we must add truck to weighing queue and also clear loader
                 weighQueue.addTruck(this->loader1);
                 futureList->removeEvent(event);
@@ -94,6 +97,7 @@ void Loader::processEvents(LoadingQueue &loadingQueue, WeighQueue &weighQueue)
         Event* event = futureList->atTruck(this->loader2->getIndex());
         if(event != nullptr) {
             if(event->getEventType() == Event::EL && event->getTime() == DataProvider::getCurrentClock()) {
+                CumulativeStatistics::appendLoadersBusyTime(timePenalty);
                 // At this time, loading is finished and we must add truck to weighing queue and also clear loader
                 weighQueue.addTruck(this->loader2);
                 futureList->removeEvent(event);
@@ -102,7 +106,6 @@ void Loader::processEvents(LoadingQueue &loadingQueue, WeighQueue &weighQueue)
         }
     }
 
-    unsigned int timePenalty = DataProvider::getClockTimePenalty();
 
     if(this->isLoader1Busy()) {
         CumulativeStatistics::appendLoadersBusyTime(timePenalty);

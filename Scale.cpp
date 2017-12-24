@@ -58,12 +58,15 @@ QString Scale::getCount() const
 
 void Scale::processEvents(WeighQueue &weighQueue)
 {
+    unsigned int timePenalty = DataProvider::getClockTimePenalty();
+
     // Update status of current item
     if(this->scale != nullptr) {
         auto futureList = FutureEventList::getInstance();
         Event* event = futureList->atTruck(this->scale->getIndex());
         if(event != nullptr) {
             if(event->getEventType() == Event::EW && event->getTime() == DataProvider::getCurrentClock()) {
+                CumulativeStatistics::appendScaleBusyTime(timePenalty);
                 // At this time, weighing is finished and we must add new event for ALQ and also clear scale
                 short time = DataProvider::getRandomTravelTime() + DataProvider::getCurrentClock();
                 Event *alqEvent = new Event(Event::ALQ, time, event->getTruck());
@@ -74,7 +77,6 @@ void Scale::processEvents(WeighQueue &weighQueue)
         }
     }
 
-    unsigned int timePenalty = DataProvider::getClockTimePenalty();
 
     if(this->isBusy()) {
         CumulativeStatistics::appendScaleBusyTime(timePenalty);

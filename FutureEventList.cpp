@@ -55,17 +55,17 @@ Event *FutureEventList::getNextEvent()
         return nullptr;
     }
 
-    int pastTime = this->lstEvents.first()->getTime();
+    unsigned int minTime = this->lstEvents.first()->getTime();
     int index = 0;
 
     for (int i = 0; i < this->lstEvents.size(); ++i) {
         int eventTime = this->lstEvents.at(i)->getTime();
 
-        if(eventTime < pastTime) {
+        if(eventTime < minTime) {
             index = i;
+            minTime = eventTime;
         }
 
-        pastTime = eventTime;
     }
 
     return this->lstEvents.at(index);
