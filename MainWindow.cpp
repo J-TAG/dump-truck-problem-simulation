@@ -218,6 +218,6 @@ void MainWindow::on_pushButtonSimulation_clicked()
 
     this->saveData();
 
-    DialogSimulation *dlg = new DialogSimulation(this);
-    dlg->open();
+    DialogSimulation dlg(this);
+    dlg.exec();
 }

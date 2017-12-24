@@ -8,6 +8,7 @@
 **************************************************************************/
 #include "CumulativeStatistics.hpp"
 #include "DataProvider.hpp"
+#include "DialogCharts.hpp"
 #include "DialogSimulation.hpp"
 #include "FutureEventList.hpp"
 #include "Loader.hpp"
@@ -17,6 +18,7 @@
 #include "ui_DialogSimulation.h"
 
 #include <QMessageBox>
+#include <QPushButton>
 #include <QSettings>
 
 DialogSimulation::DialogSimulation(QWidget *parent) :
@@ -27,8 +29,14 @@ DialogSimulation::DialogSimulation(QWidget *parent) :
 
     connect(this, &DialogSimulation::finished, this, &DialogSimulation::onFinished);
 
+    this->seriesBlData = new QLineSeries(this);
+    this->seriesBsData = new QLineSeries(this);
+
     // Simulation table
     this->initializeSimulationTable();
+
+    // Statistics button
+    this->addStatisticsButton();
 }
 
 DialogSimulation::~DialogSimulation()
@@ -43,6 +51,14 @@ void DialogSimulation::onFinished(int code)
     QSettings settings;
     settings.setValue("simulator/headerState", ui->tableWidgetSimulation->horizontalHeader()->saveState());
     settings.setValue("simulator/geometry", this->saveGeometry());
+}
+
+void DialogSimulation::onStatisticsButtonClicked(bool checked)
+{
+    Q_UNUSED(checked);
+
+    DialogCharts dlg(this, this->seriesBlData, this->seriesBsData);
+    dlg.exec();
 }
 
 void DialogSimulation::initializeSimulationTable()
@@ -125,7 +141,9 @@ void DialogSimulation::executeSimulation()
     firstRow[WeighQueue] = weighQueue.getString();
     firstRow[FutureEventList] = futureEventList->getString();
     firstRow[Bl] = QString::number(CumulativeStatistics::getLoadersBusyTime());
+    this->seriesBlData->append(DataProvider::getCurrentClock(), CumulativeStatistics::getLoadersBusyTime());
     firstRow[Bs] = QString::number(CumulativeStatistics::getScaleBusyTime());
+    this->seriesBsData->append(DataProvider::getCurrentClock(), CumulativeStatistics::getScaleBusyTime());
     lstMap.append(firstRow);
 
     auto simulationCount = settings.value("simulation/count").toUInt();
@@ -151,19 +169,21 @@ void DialogSimulation::executeSimulation()
         // Process scale events
         scale.processEvents(weighQueue);
 
-        QHash<Columns, QString> row2;
+        QHash<Columns, QString> row;
 
-        row2[Clock] = QString::number(DataProvider::getCurrentClock());
-        row2[LQt] = loadingQueue.getCount();
-        row2[Lt] = loaders.getCount();
-        row2[WQt] = weighQueue.getCount();
-        row2[Wt] = scale.getCount();
-        row2[LoaderQueue] = loadingQueue.getString();
-        row2[WeighQueue] = weighQueue.getString();
-        row2[FutureEventList] = futureEventList->getString();
-        row2[Bl] = QString::number(CumulativeStatistics::getLoadersBusyTime());
-        row2[Bs] = QString::number(CumulativeStatistics::getScaleBusyTime());
-        lstMap.append(row2);
+        row[Clock] = QString::number(DataProvider::getCurrentClock());
+        row[LQt] = loadingQueue.getCount();
+        row[Lt] = loaders.getCount();
+        row[WQt] = weighQueue.getCount();
+        row[Wt] = scale.getCount();
+        row[LoaderQueue] = loadingQueue.getString();
+        row[WeighQueue] = weighQueue.getString();
+        row[FutureEventList] = futureEventList->getString();
+        row[Bl] = QString::number(CumulativeStatistics::getLoadersBusyTime());
+        this->seriesBlData->append(DataProvider::getCurrentClock(), CumulativeStatistics::getLoadersBusyTime());
+        row[Bs] = QString::number(CumulativeStatistics::getScaleBusyTime());
+        this->seriesBsData->append(DataProvider::getCurrentClock(), CumulativeStatistics::getScaleBusyTime());
+        lstMap.append(row);
     }
 
     // Cleanup
@@ -209,4 +229,10 @@ void DialogSimulation::visualizeDataTable()
         QTableWidgetItem *item10 = new QTableWidgetItem(map[Bs]);
         ui->tableWidgetSimulation->setItem(i, 9, item10);
     }
+}
+
+void DialogSimulation::addStatisticsButton()
+{
+    QPushButton *button = ui->buttonBox->addButton("Statistics", QDialogButtonBox::ActionRole);
+    connect(button, &QAbstractButton::clicked, this, &DialogSimulation::onStatisticsButtonClicked);
 }

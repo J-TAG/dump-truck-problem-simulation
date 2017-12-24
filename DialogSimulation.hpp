@@ -11,6 +11,10 @@
 
 #include <QDialog>
 #include <QHash>
+#include <QAbstractButton>
+#include <QLineSeries>
+
+using namespace QtCharts;
 
 namespace Ui {
 class DialogSimulation;
@@ -29,13 +33,17 @@ public:
 
 public slots:
     void onFinished(int code);
+    void onStatisticsButtonClicked(bool checked);
 
 private:
     void initializeSimulationTable();
     void executeSimulation();
     void visualizeDataTable();
+    void addStatisticsButton();
     Ui::DialogSimulation *ui;
     QList<QHash<Columns, QString>> lstMap;
+    QLineSeries *seriesBlData;
+    QLineSeries *seriesBsData;
 };
 
 #endif // DIALOGSIMULATION_HPP

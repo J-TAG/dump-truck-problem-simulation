@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -36,7 +36,8 @@ SOURCES += \
     Event.cpp \
     FutureEventList.cpp \
     DataProvider.cpp \
-    CumulativeStatistics.cpp
+    CumulativeStatistics.cpp \
+    DialogCharts.cpp
 
 HEADERS += \
         MainWindow.hpp \
@@ -50,8 +51,10 @@ HEADERS += \
     Event.hpp \
     FutureEventList.hpp \
     DataProvider.hpp \
-    CumulativeStatistics.hpp
+    CumulativeStatistics.hpp \
+    DialogCharts.hpp
 
 FORMS += \
         MainWindow.ui \
-    DialogSimulation.ui
+    DialogSimulation.ui \
+    DialogCharts.ui
