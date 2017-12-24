@@ -16,8 +16,11 @@ class FutureEventList
 public:
     static FutureEventList *getInstance();
     void addEvent(Event *event);
+    void removeEvent(Event *event);
     void clear();
     QString getString() const;
+    Event* getNextEvent();
+    Event* atTruck(int truckIndex) const;
 
 signals:
 

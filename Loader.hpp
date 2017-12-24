@@ -10,6 +10,8 @@
 #define LOADER_HPP
 
 #include "DumpTruck.hpp"
+#include "LoadingQueue.hpp"
+#include "WeighQueue.hpp"
 
 #include <QObject>
 
@@ -20,7 +22,12 @@ public:
     explicit Loader(QObject *parent = nullptr);
     bool addTruck(DumpTruck *truck);
     bool canAddTruck();
+    bool isLoader1Busy();
+    bool isLoader2Busy();
     QString getCount() const;
+    void processEvents(LoadingQueue &loadingQueue, WeighQueue &weighQueue);
+    void releaseLoader1();
+    void releaseLoader2();
 
 signals:
 

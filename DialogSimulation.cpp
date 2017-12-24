@@ -6,6 +6,8 @@
 **
 ** This file created in 12.
 **************************************************************************/
+#include "CumulativeStatistics.hpp"
+#include "DataProvider.hpp"
 #include "DialogSimulation.hpp"
 #include "FutureEventList.hpp"
 #include "Loader.hpp"
@@ -13,6 +15,8 @@
 #include "Scale.hpp"
 #include "WeighQueue.hpp"
 #include "ui_DialogSimulation.h"
+
+#include <QMessageBox>
 
 DialogSimulation::DialogSimulation(QWidget *parent) :
     QDialog(parent),
@@ -66,11 +70,10 @@ void DialogSimulation::initializeSimulationTable()
     auto futureEventList = ::FutureEventList::getInstance();
 
 
-    short clock = 0;
 
     QHash<Columns, QString> row1;
 
-    row1[Clock] = QString::number(clock);
+    row1[Clock] = QString::number(DataProvider::getCurrentClock());
     row1[LQt] = loadingQueue.getCount();
     row1[Lt] = loaders.getCount();
     row1[WQt] = weighQueue.getCount();
@@ -78,10 +81,40 @@ void DialogSimulation::initializeSimulationTable()
     row1[LoaderQueue] = loadingQueue.getString();
     row1[WeighQueue] = weighQueue.getString();
     row1[FutureEventList] = futureEventList->getString();
-    row1[Bl] = "";
-    row1[Bs] = "";
+    row1[Bl] = QString::number(CumulativeStatistics::getLoadersBusyTime());
+    row1[Bs] = QString::number(CumulativeStatistics::getScaleBusyTime());
     lstMap.append(row1);
 
+    // Second
+    Event *nextEvent = futureEventList->getNextEvent();
+
+    if(nextEvent == nullptr) {
+        // All events are processed
+        QMessageBox::information(this, "End of Process", "No event is in future event list.");
+    }
+
+    // Update clock
+    DataProvider::updateClock(nextEvent->getTime());
+
+    // Process loaders events
+    loaders.processEvents(loadingQueue, weighQueue);
+
+    // Process scale events
+    scale.processEvents(weighQueue);
+
+    QHash<Columns, QString> row2;
+
+    row2[Clock] = QString::number(DataProvider::getCurrentClock());
+    row2[LQt] = loadingQueue.getCount();
+    row2[Lt] = loaders.getCount();
+    row2[WQt] = weighQueue.getCount();
+    row2[Wt] = scale.getCount();
+    row2[LoaderQueue] = loadingQueue.getString();
+    row2[WeighQueue] = weighQueue.getString();
+    row2[FutureEventList] = futureEventList->getString();
+    row2[Bl] = QString::number(CumulativeStatistics::getLoadersBusyTime());
+    row2[Bs] = QString::number(CumulativeStatistics::getScaleBusyTime());
+    lstMap.append(row2);
 
     // View items
     for (int i = 0; i < lstMap.count(); ++i) {

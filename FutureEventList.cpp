@@ -24,6 +24,15 @@ void FutureEventList::addEvent(Event *event)
     this->lstEvents.append(event);
 }
 
+void FutureEventList::removeEvent(Event *event)
+{
+    if(this->lstEvents.isEmpty()) {
+        return;
+    }
+
+    this->lstEvents.removeOne(event);
+}
+
 void FutureEventList::clear()
 {
     this->lstEvents.clear();
@@ -38,4 +47,44 @@ QString FutureEventList::getString() const
     }
 
     return strResult;
+}
+
+Event *FutureEventList::getNextEvent()
+{
+    if(this->lstEvents.isEmpty()) {
+        return nullptr;
+    }
+
+    int pastTime = this->lstEvents.first()->getTime();
+    int index = 0;
+
+    for (int i = 0; i < this->lstEvents.size(); ++i) {
+        int eventTime = this->lstEvents.at(i)->getTime();
+
+        if(eventTime < pastTime) {
+            index = i;
+        }
+
+        pastTime = eventTime;
+    }
+
+    return this->lstEvents.at(index);
+}
+
+Event *FutureEventList::atTruck(int truckIndex) const
+{
+    if(this->lstEvents.isEmpty()) {
+        return nullptr;
+    }
+
+    for (int i = 0; i < this->lstEvents.size(); ++i) {
+        int index = this->lstEvents.at(i)->getTruck()->getIndex();
+
+        if(index == truckIndex) {
+            return this->lstEvents.at(i);
+        }
+
+    }
+
+    return nullptr;
 }

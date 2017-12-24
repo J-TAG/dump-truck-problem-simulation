@@ -8,7 +8,7 @@
 **************************************************************************/
 #include "DumpTruck.hpp"
 
-DumpTruck::DumpTruck(short index, QObject *parent) : QObject(parent), index(index)
+DumpTruck::DumpTruck(int index, QObject *parent) : QObject(parent), index(index)
 {
 
 }
@@ -21,6 +21,11 @@ void DumpTruck::setState(DumpTruck::State state)
 QString DumpTruck::getName() const
 {
     return "DT" + QString::number(this->index);
+}
+
+int DumpTruck::getIndex() const
+{
+    return this->index;
 }
 
 DumpTruck::State DumpTruck::getState() const

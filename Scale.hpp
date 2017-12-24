@@ -10,6 +10,7 @@
 #define SCALE_HPP
 
 #include "DumpTruck.hpp"
+#include "WeighQueue.hpp"
 
 #include <QObject>
 
@@ -20,7 +21,10 @@ public:
     explicit Scale(QObject *parent = nullptr);
     bool addTruck(DumpTruck *truck);
     bool canAddTruck();
+    bool isBusy();
     QString getCount() const;
+    void processEvents(WeighQueue &weighQueue);
+    void release();
 
 signals:
 

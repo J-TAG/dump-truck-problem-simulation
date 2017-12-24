@@ -15,9 +15,15 @@ class DataProvider
 public:
     DataProvider();
     static short getRandomLoadingTime();
-    static short getRandomWaitingTime();
+    static short getRandomWeighingTime();
+    static int getRandomTravelTime();
+    static void updateClock(unsigned int newClock);
+    static unsigned int getClockTimePenalty();
+    static unsigned int getCurrentClock();
 
-    static unsigned int currntClock;
+private:
+    static unsigned int currentClock;
+    static unsigned int pastClock;
 };
 
 #endif // DATAPROVIDER_HPP

@@ -20,9 +20,10 @@ public:
     enum Type {
         None, ALQ, EL, EW
     };
-    explicit Event(Type eventType, short time, DumpTruck *truck, QObject *parent = nullptr);
+    explicit Event(Type eventType, unsigned int time, DumpTruck *truck, QObject *parent = nullptr);
+    Type getEventType() const;
     QString getTypeString() const;
-    int getTime() const;
+    unsigned int getTime() const;
     QString getTimeString() const;
     DumpTruck *getTruck();
 
@@ -31,7 +32,7 @@ signals:
 public slots:
 private:
     Type eventType = None;
-    short time = 0;
+    unsigned int time = 0;
     DumpTruck *truck = nullptr;
 };
 

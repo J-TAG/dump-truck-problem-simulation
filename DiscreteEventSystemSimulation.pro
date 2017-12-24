@@ -35,7 +35,8 @@ SOURCES += \
     Scale.cpp \
     Event.cpp \
     FutureEventList.cpp \
-    DataProvider.cpp
+    DataProvider.cpp \
+    CumulativeStatistics.cpp
 
 HEADERS += \
         MainWindow.hpp \
@@ -48,7 +49,8 @@ HEADERS += \
     Scale.hpp \
     Event.hpp \
     FutureEventList.hpp \
-    DataProvider.hpp
+    DataProvider.hpp \
+    CumulativeStatistics.hpp
 
 FORMS += \
         MainWindow.ui \

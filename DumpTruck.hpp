@@ -18,17 +18,18 @@ public:
     enum State {
         None, InLoaderQueue, Loading, InWeighQueue, Weighing, Traveling
     };
-    explicit DumpTruck(short index, QObject *parent = nullptr);
+    explicit DumpTruck(int index, QObject *parent = nullptr);
 
     void setState(State state);
     QString getName() const;
+    int getIndex() const;
     State getState() const;
 
 signals:
 
 public slots:
 private:
-    short index = -1;
+    int index = -1;
     State state = None;
 };
 
