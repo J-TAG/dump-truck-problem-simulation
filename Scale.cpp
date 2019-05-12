@@ -26,7 +26,7 @@ bool Scale::addTruck(DumpTruck *truck)
             return false;
         }
         truck->setState(DumpTruck::Weighing);
-        int time = DataProvider::getRandomWeighingTime() + DataProvider::getCurrentClock();
+        unsigned int time = uint(DataProvider::getRandomWeighingTime()) + DataProvider::getCurrentClock();
         Event *event = new Event(Event::EW, time, truck);
         FutureEventList::getInstance()->addEvent(event);
         return true;
@@ -68,7 +68,7 @@ void Scale::processEvents(WeighQueue &weighQueue)
             if(event->getEventType() == Event::EW && event->getTime() == DataProvider::getCurrentClock()) {
                 CumulativeStatistics::appendScaleBusyTime(timePenalty);
                 // At this time, weighing is finished and we must add new event for ALQ and also clear scale
-                short time = DataProvider::getRandomTravelTime() + DataProvider::getCurrentClock();
+                auto time = uint(DataProvider::getRandomTravelTime()) + DataProvider::getCurrentClock();
                 Event *alqEvent = new Event(Event::ALQ, time, event->getTruck());
                 futureList->removeEvent(event);
                 futureList->addEvent(alqEvent);

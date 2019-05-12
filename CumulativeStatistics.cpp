@@ -8,8 +8,8 @@
 **************************************************************************/
 #include "CumulativeStatistics.hpp"
 
-int CumulativeStatistics::busyTimeLoaders = 0;
-int CumulativeStatistics::busyTimeScale = 0;
+unsigned int CumulativeStatistics::busyTimeLoaders = 0;
+unsigned int CumulativeStatistics::busyTimeScale = 0;
 
 
 CumulativeStatistics::CumulativeStatistics()
@@ -17,22 +17,22 @@ CumulativeStatistics::CumulativeStatistics()
 
 }
 
-void CumulativeStatistics::appendLoadersBusyTime(int time)
+void CumulativeStatistics::appendLoadersBusyTime(unsigned int time)
 {
     CumulativeStatistics::busyTimeLoaders += time;
 }
 
-void CumulativeStatistics::appendScaleBusyTime(int time)
+void CumulativeStatistics::appendScaleBusyTime(unsigned int time)
 {
     CumulativeStatistics::busyTimeScale += time;
 }
 
-int CumulativeStatistics::getLoadersBusyTime()
+unsigned int CumulativeStatistics::getLoadersBusyTime()
 {
     return CumulativeStatistics::busyTimeLoaders;
 }
 
-int CumulativeStatistics::getScaleBusyTime()
+unsigned int CumulativeStatistics::getScaleBusyTime()
 {
     return CumulativeStatistics::busyTimeScale;
 }

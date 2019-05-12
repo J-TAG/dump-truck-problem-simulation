@@ -70,7 +70,7 @@ void DialogSimulation::initializeSimulationTable()
     strLstHeaders << "Clock t" << "LQ(t)" << "L(t)" << "WQ(t)" << "W(t)" << "Loader Queue" << "Weigh Queue" << "Future Event List" << "B L" << "B S";
     ui->tableWidgetSimulation->setHorizontalHeaderLabels(strLstHeaders);
     QSettings settings;
-    ui->tableWidgetSimulation->setRowCount(settings.value("simulation/count").toUInt());
+    ui->tableWidgetSimulation->setRowCount(settings.value("simulation/count").toInt());
 
 
     // Load past state
@@ -102,7 +102,7 @@ void DialogSimulation::executeSimulation()
     LoadingQueue loadingQueue;
     auto loadingQueueCount = settings.value("simulation/itemsInitialize/loadingQueue").toUInt();
     for (unsigned int i = 0; i < loadingQueueCount; ++i) {
-        loadingQueue.addTruck(trucks.at(i));
+        loadingQueue.addTruck(trucks.at(int(i)));
     }
 
     // Loaders
@@ -111,7 +111,7 @@ void DialogSimulation::executeSimulation()
     auto loaderCount = settings.value("simulation/itemsInitialize/loader").toUInt();
     loaderCount += loadingQueueCount;
     for (unsigned int i = loadingQueueCount; i < loaderCount; ++i) {
-        loaders.addTruck(trucks.at(i));
+        loaders.addTruck(trucks.at(int(i)));
     }
 
     // Weigh queue
@@ -120,7 +120,7 @@ void DialogSimulation::executeSimulation()
     auto weighQueueCount = settings.value("simulation/itemsInitialize/weighQueue").toUInt();
     weighQueueCount += loaderCount;
     for (unsigned int i = loaderCount; i < weighQueueCount; ++i) {
-        weighQueue.addTruck(trucks.at(i));
+        weighQueue.addTruck(trucks.at(int(i)));
     }
 
     // Scale

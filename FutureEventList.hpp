@@ -20,7 +20,7 @@ public:
     void clear();
     QString getString() const;
     Event* getNextEvent();
-    Event* atTruck(int truckIndex) const;
+    Event* atTruck(unsigned int truckIndex) const;
 
 signals:
 

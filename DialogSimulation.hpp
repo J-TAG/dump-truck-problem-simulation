@@ -29,7 +29,7 @@ public:
     enum Columns {
         Clock, LQt, Lt, WQt, Wt, LoaderQueue, WeighQueue, FutureEventList, Bl, Bs
     };
-    explicit DialogSimulation(QWidget *parent = 0);
+    explicit DialogSimulation(QWidget *parent = nullptr);
     ~DialogSimulation();
 
 public slots:

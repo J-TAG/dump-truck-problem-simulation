@@ -64,7 +64,7 @@ void DialogCharts::initBusyChart()
     this->chartBusy->setAnimationOptions(QChart::AllAnimations);
 
     this->chartBusy->createDefaultAxes();
-    int max = qMax(CumulativeStatistics::getLoadersBusyTime(), CumulativeStatistics::getScaleBusyTime());
+    unsigned int max = qMax(CumulativeStatistics::getLoadersBusyTime(), CumulativeStatistics::getScaleBusyTime());
     this->chartBusy->axes(Qt::Horizontal).back()->setRange(0, DataProvider::getCurrentClock());
     this->chartBusy->axes(Qt::Horizontal).back()->setTitleText("Clock");
     this->chartBusy->axes(Qt::Vertical).back()->setRange(0, max);

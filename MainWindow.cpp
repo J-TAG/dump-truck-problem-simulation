@@ -191,18 +191,18 @@ void MainWindow::saveData()
 void MainWindow::loadData()
 {
     QSettings settings;
-    ui->spinBoxSimulationCount->setValue(settings.value("simulation/count").toUInt());
-    ui->spinBoxNumberOfTrucks->setValue(settings.value("simulation/itemsInitialize/trucks").toUInt());
-    ui->spinBoxNumberOfTrucksInLoadingQueue->setValue(settings.value("simulation/itemsInitialize/loadingQueue").toUInt());
-    ui->spinBoxNumberOfTrucksInLoaders->setValue(settings.value("simulation/itemsInitialize/loader").toUInt());
-    ui->spinBoxNumberOftrucksInWeighQueue->setValue(settings.value("simulation/itemsInitialize/weighQueue").toUInt());
+    ui->spinBoxSimulationCount->setValue(settings.value("simulation/count").toInt());
+    ui->spinBoxNumberOfTrucks->setValue(settings.value("simulation/itemsInitialize/trucks").toInt());
+    ui->spinBoxNumberOfTrucksInLoadingQueue->setValue(settings.value("simulation/itemsInitialize/loadingQueue").toInt());
+    ui->spinBoxNumberOfTrucksInLoaders->setValue(settings.value("simulation/itemsInitialize/loader").toInt());
+    ui->spinBoxNumberOftrucksInWeighQueue->setValue(settings.value("simulation/itemsInitialize/weighQueue").toInt());
     ui->checkBoxTruckInScale->setChecked(settings.value("simulation/itemsInitialize/scale").toBool());
 }
 
 void MainWindow::on_pushButtonSimulation_clicked()
 {
-    unsigned int numberOfTrucks = ui->spinBoxNumberOfTrucks->value();
-    unsigned int totalOtherTrucksCount = ui->spinBoxNumberOfTrucksInLoadingQueue->value();
+    int numberOfTrucks = ui->spinBoxNumberOfTrucks->value();
+    int totalOtherTrucksCount = ui->spinBoxNumberOfTrucksInLoadingQueue->value();
     totalOtherTrucksCount += ui->spinBoxNumberOfTrucksInLoaders->value();
     totalOtherTrucksCount += ui->spinBoxNumberOftrucksInWeighQueue->value();
     totalOtherTrucksCount += ui->checkBoxTruckInScale->isChecked() ? 1 : 0;

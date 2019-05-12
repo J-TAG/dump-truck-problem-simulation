@@ -30,7 +30,9 @@ bool Loader::addTruck(DumpTruck *truck)
 
         truck->setState(DumpTruck::Loading);
 
-        short time = DataProvider::getRandomLoadingTime() + DataProvider::getCurrentClock();
+        unsigned int randomLoadingTime = uint(DataProvider::getRandomLoadingTime());
+
+        unsigned int time = randomLoadingTime + DataProvider::getCurrentClock();
         Event *event = new Event(Event::EL, time, truck);
         FutureEventList::getInstance()->addEvent(event);
 

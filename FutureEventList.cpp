@@ -71,14 +71,14 @@ Event *FutureEventList::getNextEvent()
     return this->lstEvents.at(index);
 }
 
-Event *FutureEventList::atTruck(int truckIndex) const
+Event *FutureEventList::atTruck(unsigned int truckIndex) const
 {
     if(this->lstEvents.isEmpty()) {
         return nullptr;
     }
 
     for (int i = 0; i < this->lstEvents.size(); ++i) {
-        int index = this->lstEvents.at(i)->getTruck()->getIndex();
+        unsigned int index = this->lstEvents.at(i)->getTruck()->getIndex();
 
         if(index == truckIndex) {
             return this->lstEvents.at(i);
