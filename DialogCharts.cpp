@@ -65,10 +65,10 @@ void DialogCharts::initBusyChart()
 
     this->chartBusy->createDefaultAxes();
     int max = qMax(CumulativeStatistics::getLoadersBusyTime(), CumulativeStatistics::getScaleBusyTime());
-    this->chartBusy->axisX()->setRange(0, DataProvider::getCurrentClock());
-    this->chartBusy->axisX()->setTitleText("Clock");
-    this->chartBusy->axisY()->setRange(0, max);
-    this->chartBusy->axisY()->setTitleText("Busy Time");
+    this->chartBusy->axes(Qt::Horizontal).back()->setRange(0, DataProvider::getCurrentClock());
+    this->chartBusy->axes(Qt::Horizontal).back()->setTitleText("Clock");
+    this->chartBusy->axes(Qt::Vertical).back()->setRange(0, max);
+    this->chartBusy->axes(Qt::Vertical).back()->setTitleText("Busy Time");
 
     this->chartBusy->legend()->setVisible(true);
     this->chartBusy->legend()->setAlignment(Qt::AlignBottom);
@@ -76,7 +76,7 @@ void DialogCharts::initBusyChart()
     QChartView *chartView = new QChartView(this->chartBusy, this);
     chartView->setRenderHint(QPainter::Antialiasing);
 
-    ui->horizontalLayout->addWidget(chartView, 0, 0);
+    ui->horizontalLayout->addWidget(chartView, 0, nullptr);
 }
 
 void DialogCharts::initQueueChart()
@@ -94,10 +94,10 @@ void DialogCharts::initQueueChart()
     this->chartQueue->createDefaultAxes();
     QSettings settings;
     auto truckCount = settings.value("simulation/itemsInitialize/trucks").toUInt();
-    this->chartQueue->axisX()->setRange(0, DataProvider::getCurrentClock());
-    this->chartQueue->axisX()->setTitleText("Clock");
-    this->chartQueue->axisY()->setRange(0, truckCount);
-    this->chartQueue->axisY()->setTitleText("Trucks in Queue");
+    this->chartQueue->axes(Qt::Horizontal).back()->setRange(0, DataProvider::getCurrentClock());
+    this->chartQueue->axes(Qt::Horizontal).back()->setTitleText("Clock");
+    this->chartQueue->axes(Qt::Vertical).back()->setRange(0, truckCount);
+    this->chartQueue->axes(Qt::Vertical).back()->setTitleText("Trucks in Queue");
 
     this->chartQueue->legend()->setVisible(true);
     this->chartQueue->legend()->setAlignment(Qt::AlignBottom);
@@ -105,5 +105,5 @@ void DialogCharts::initQueueChart()
     QChartView *chartView = new QChartView(this->chartQueue, this);
     chartView->setRenderHint(QPainter::Antialiasing);
 
-    ui->horizontalLayout->addWidget(chartView, 0, 0);
+    ui->horizontalLayout->addWidget(chartView, 0, nullptr);
 }

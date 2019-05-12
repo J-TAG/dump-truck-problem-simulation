@@ -59,7 +59,7 @@ Event *FutureEventList::getNextEvent()
     int index = 0;
 
     for (int i = 0; i < this->lstEvents.size(); ++i) {
-        int eventTime = this->lstEvents.at(i)->getTime();
+        unsigned int eventTime = this->lstEvents.at(i)->getTime();
 
         if(eventTime < minTime) {
             index = i;
